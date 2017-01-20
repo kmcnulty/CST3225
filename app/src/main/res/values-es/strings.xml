@@ -3,4 +3,13 @@
     <string name="app_name">AndroidLabs</string>
     <string name="hello_message">Holla Mundo!</string>
     <string name="ButtonText">Soy Buton!</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="Login">Iniciar sesión</string>
+    <string name="password">Contraseña</string>
+    <string name="title_activity_list_items">Lista de elementos Actividad</string>
+    <string name="enable_something">Habilitar algo</string>
+    <string name="Login_Name">Nombre de inicio de sesión </string>
 </resources>
+
+
+
