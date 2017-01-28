@@ -9,4 +9,8 @@
     <string name="title_activity_list_items">ListItemsActivity</string>
     <string name="enable_something">Enable Something</string>
     <string name="Login_Name">Login Name</string>
+    <string name="Dialogue">Do you want to finish the activity?</string>string>
+    <string name="Dialogue_Title">Dialogue</string>string>
+    <string name="Dialogue_Positive">"Yes"</string>string>
+    <string name="Dialogue_Negative">"No"</string>string>
 </resources>
