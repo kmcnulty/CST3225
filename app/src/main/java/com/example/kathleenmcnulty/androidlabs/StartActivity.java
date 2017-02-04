@@ -14,6 +14,7 @@ public class StartActivity extends AppCompatActivity {
 
     protected static final String ACTIVITY_NAME = "StartActivity";
     Button button;
+    Button button3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,18 @@ public class StartActivity extends AppCompatActivity {
                 startActivityForResult(intent, 5);
 
 //when on start gets called again for startactivityforresult its going to call onactivityresult
+            }
+        });
+
+        button3=(Button) findViewById(R.id.button3);
+        //HERE
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view) {
+                Log.i(ACTIVITY_NAME, "User clicked Start Chat");
+                Intent intent = new Intent(StartActivity.this, ChatWindow.class);
+                startActivityForResult(intent,5);
+
             }
         });
 

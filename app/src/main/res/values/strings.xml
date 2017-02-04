@@ -13,4 +13,8 @@
     <string name="Dialogue_Title">Dialogue</string>string>
     <string name="Dialogue_Positive">"Yes"</string>string>
     <string name="Dialogue_Negative">"No"</string>string>
+    <string name="Start_Chat">"Start Chat"</string>string>
+    <string name="Send_Button">"Send Button"</string>
+    <string name="message_text">"Message Text</string>
+
 </resources>

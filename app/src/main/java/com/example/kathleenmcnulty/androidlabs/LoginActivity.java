@@ -31,7 +31,17 @@ public class LoginActivity extends AppCompatActivity {
       buttonlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view) {
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                et = (EditText)findViewById(R.id.editText);
+
+
+                editor.commit();
+
+
+
                 Intent intent = new Intent(LoginActivity.this, StartActivity.class);
+
                 startActivity(intent);
 
             }
@@ -56,11 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-      editor.putString("DefaultEmail", "email@domain.com");
-
-        editor.commit();
-
-         et = (EditText)findViewById(R.id.editText);
+        et = (EditText)findViewById(R.id.editText);
         et.setText(pref.getString("DefaultEmail", "default"));
 
 

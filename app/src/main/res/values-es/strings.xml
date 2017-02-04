@@ -9,6 +9,7 @@
     <string name="title_activity_list_items">Lista de elementos Actividad</string>
     <string name="enable_something">Habilitar algo</string>
     <string name="Login_Name">Nombre de inicio de sesión </string>
+    <string name="Start_Chat">Comenzar chat</string>
 </resources>
 
 
