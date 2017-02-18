@@ -10,6 +10,7 @@
     <string name="enable_something">Habilitar algo</string>
     <string name="Login_Name">Nombre de inicio de sesión </string>
     <string name="Start_Chat">Comenzar chat</string>
+    <string name="Dialogue"></string>
 </resources>
 
 
