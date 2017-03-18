@@ -33,4 +33,12 @@
         android:layout_marginStart="7dp"
         android:layout_marginTop="22dp"
         android:id="@+id/button3" />
+
+    <Button
+        android:text="@string/weather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button3"
+        android:layout_marginTop="36dp"
+        android:id="@+id/button4" />
 </RelativeLayout>

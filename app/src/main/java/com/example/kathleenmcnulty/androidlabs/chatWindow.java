@@ -1,9 +1,12 @@
 package com.example.kathleenmcnulty.androidlabs;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,8 +29,11 @@ Button button5;
 ListView listView;
     EditText editText;
     ArrayList<String> arrayList =new ArrayList<>();
+    //ArrayList<String> arrayListDbID =new ArrayList<>();
     String position="null";
     ChatDatabaseHelper dbHelper;
+    boolean isTablet;
+    ChatAdapter messageAdapter;
 
     protected static final String ACTIVITY_NAME = "chatWindow";
 
@@ -39,11 +45,11 @@ ListView listView;
         dbHelper = new ChatDatabaseHelper(this);
         db = dbHelper.getWritableDatabase();
         setContentView(R.layout.activity_chat_window);
-
+        messageAdapter =new ChatAdapter( this );
         button5=(Button) findViewById(R.id.button4);
         listView=(ListView) findViewById(R.id.listView);
         editText=(EditText) findViewById(R.id.editText4);
-        final ChatAdapter messageAdapter =new ChatAdapter( this );
+
         listView.setAdapter(messageAdapter);
         button5.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +70,7 @@ ListView listView;
 
 
         //
-        Cursor cursor = db.query(false, ChatDatabaseHelper.DATABASE_NAME,
+        final Cursor cursor = db.query(false, ChatDatabaseHelper.DATABASE_NAME,
                 //this means return all values for those fields
                 new String[] { ChatDatabaseHelper.KEY_ID, ChatDatabaseHelper.KEY_MESSAGE},
                 null,null, null, null, null, null);
@@ -77,6 +83,7 @@ ListView listView;
             Log.i(ACTIVITY_NAME, "SQL MESSAGE:" + cursor.getString( cursor.getColumnIndex( ChatDatabaseHelper.KEY_MESSAGE) ) );
             //Adds to array
             arrayList.add(cursor.getString( cursor.getColumnIndex( ChatDatabaseHelper.KEY_MESSAGE) ));
+            //arrayListDbID.add(cursor.getString( cursor.getColumnIndex( ChatDatabaseHelper.KEY_ID) ));
             //Get's database cursor to move to next element
             cursor.moveToNext();
         }
@@ -84,8 +91,46 @@ ListView listView;
         for(int i=0;i<cursor.getColumnCount();i++) {
             cursor.getColumnName(i);
             Log.i(ACTIVITY_NAME, "Column Name:" +  cursor.getColumnName(i));
-        }
 
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int j, long l) {
+
+
+
+                    Bundle bun = new Bundle();
+                    bun.putInt("ID", j);//l is the database ID of selected item
+                    //bun.putLong("DBID", Long.parseLong(arrayListDbID.get(j)));
+                    Log.d("LONDID", l+"");
+                    String msg = arrayList.get(j);
+                    bun.putString("MESSAGE", msg);
+
+                    //step 2, if a tablet, insert fragment into FrameLayout, pass data
+                    if(isTablet) {
+                        MessageFragment frag = new MessageFragment();
+
+                        frag.setArguments(bun);
+
+                        getFragmentManager().beginTransaction().add(R.id.frame, frag).commit();
+                    }
+                    //step 3 if a phone, transition to empty Activity that has FrameLayout
+                    else //isPhone
+                    {
+                        Intent intnt = new Intent(ChatWindow.this, MessageDetails.class);
+                        intnt.putExtra("ID", j); //pass the Database ID to next activity
+                        //intnt.putExtra("DBID", Long.parseLong(arrayListDbID.get(j)));
+                        intnt.putExtra("MESSAGE", msg);
+                        startActivityForResult(intnt,1);
+                    }
+                }
+            });
+
+            //step 1, find out if you are on a phone or tablet.
+            isTablet = (findViewById(R.id.frame) != null); //find out if this is a phone or tablet
+
+
+        }
 
 
     }
@@ -128,5 +173,28 @@ ListView listView;
             dbHelper.close();
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                Bundle bun = data.getExtras();
+                int result = bun.getInt("ID");
+/*                Long dbid = bun.getLong("DBID");
+                Log.d("DELETEFROMDBBEFORE", dbid+"");*/
+                //deleteFromDb(result, dbid);
+                deleteFromDb(result);
+            }
+        }
+    }
+
+    public void deleteFromDb(int index){
+        Log.d("INDEXLOOKS", index+"");
+        arrayList.remove(index);
+        //Log.d("DBIDLOOKS", dbid+"");
+        db.delete(ChatDatabaseHelper.DATABASE_NAME, ChatDatabaseHelper.KEY_ID + "="+ (1+ index), null);
+        messageAdapter.notifyDataSetChanged();
     }
 }

@@ -138,7 +138,6 @@ public class WeatherForecast extends AppCompatActivity {
                         if(fileExistance(iconVal+".png")){
                             FileInputStream fis = null;
                             try {
-                                ;
                                 fis = new FileInputStream(getBaseContext().getFileStreamPath(iconVal+".png"));
 
                             }

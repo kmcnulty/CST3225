@@ -16,5 +16,8 @@
     <string name="Start_Chat">"Start Chat"</string>string>
     <string name="Send_Button">"Send Button"</string>
     <string name="message_text">"Message Text</string>
+    <string name="weather">"Weather</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

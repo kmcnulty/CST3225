@@ -10,11 +10,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import static com.example.kathleenmcnulty.androidlabs.R.id.button4;
+
 public class StartActivity extends AppCompatActivity {
 
     protected static final String ACTIVITY_NAME = "StartActivity";
     Button button;
     Button button3;
+    Button button4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,17 @@ public class StartActivity extends AppCompatActivity {
             }
         });
 
+        button4=(Button) findViewById(R.id.button4);
+        //HERE
+        button4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view) {
+                Log.i(ACTIVITY_NAME, "User clicked Start Chat");
+                Intent intent = new Intent(StartActivity.this, WeatherForecast.class);
+                startActivityForResult(intent,5);
+
+            }
+        });
 
 //The response code gets passed to
 
