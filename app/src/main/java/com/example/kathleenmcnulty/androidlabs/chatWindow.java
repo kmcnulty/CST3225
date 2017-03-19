@@ -28,8 +28,7 @@ public class ChatWindow extends AppCompatActivity {
 Button button5;
 ListView listView;
     EditText editText;
-    ArrayList<String> arrayList =new ArrayList<>();
-    //ArrayList<String> arrayListDbID =new ArrayList<>();
+    ArrayList<Message> arrayList =new ArrayList<>();
     String position="null";
     ChatDatabaseHelper dbHelper;
     boolean isTablet;
@@ -59,9 +58,11 @@ ListView listView;
                 ContentValues newValues = new ContentValues();
                 //newVakyes is a LINK VARIABLE then matching the content values to the column
                 newValues.put(ChatDatabaseHelper.KEY_MESSAGE, msg);
-            //then im putting it in the database
-            db.insert(ChatDatabaseHelper.DATABASE_NAME, "", newValues);
-             arrayList.add(msg);
+                //then im putting it in the database
+                long newId = db.insert(ChatDatabaseHelper.DATABASE_NAME, "", newValues);
+                Message msgTemp = new Message(newId, msg);
+                Log.d("MessaGEBELIKE:", msgTemp.toString());
+                arrayList.add(msgTemp);
                 messageAdapter.notifyDataSetChanged();
                 editText.setText("");
 
@@ -82,7 +83,9 @@ ListView listView;
 //
             Log.i(ACTIVITY_NAME, "SQL MESSAGE:" + cursor.getString( cursor.getColumnIndex( ChatDatabaseHelper.KEY_MESSAGE) ) );
             //Adds to array
-            arrayList.add(cursor.getString( cursor.getColumnIndex( ChatDatabaseHelper.KEY_MESSAGE) ));
+            Message myNewMsg = new Message(cursor.getLong(cursor.getColumnIndex( ChatDatabaseHelper.KEY_ID)), cursor.getString( cursor.getColumnIndex( ChatDatabaseHelper.KEY_MESSAGE) ));
+            Log.d("WHATILOOKLIKE", myNewMsg.toString());
+            arrayList.add(myNewMsg);
             //arrayListDbID.add(cursor.getString( cursor.getColumnIndex( ChatDatabaseHelper.KEY_ID) ));
             //Get's database cursor to move to next element
             cursor.moveToNext();
@@ -102,9 +105,10 @@ ListView listView;
                     Bundle bun = new Bundle();
                     bun.putInt("ID", j);//l is the database ID of selected item
                     //bun.putLong("DBID", Long.parseLong(arrayListDbID.get(j)));
-                    Log.d("LONDID", l+"");
-                    String msg = arrayList.get(j);
+                    //Log.d("LONDID", l+"");
+                    String msg = arrayList.get(j).getMessage();
                     bun.putString("MESSAGE", msg);
+                    bun.putLong("DBID", arrayList.get(j).getId());
 
                     //step 2, if a tablet, insert fragment into FrameLayout, pass data
                     if(isTablet) {
@@ -119,7 +123,7 @@ ListView listView;
                     {
                         Intent intnt = new Intent(ChatWindow.this, MessageDetails.class);
                         intnt.putExtra("ID", j); //pass the Database ID to next activity
-                        //intnt.putExtra("DBID", Long.parseLong(arrayListDbID.get(j)));
+                        intnt.putExtra("DBID", arrayList.get(j).getId());
                         intnt.putExtra("MESSAGE", msg);
                         startActivityForResult(intnt,1);
                     }
@@ -134,14 +138,37 @@ ListView listView;
 
 
     }
-    private class ChatAdapter extends ArrayAdapter<String>{
+    private class Message{
+        String msg;
+        long id;
+        public Message(long idi, String mess){
+            id = idi;
+            msg = mess;
+        }
+        public void setId(long newId){
+            id = newId;
+        }
+        public void setMessage(String newMsg){
+            msg = newMsg;
+        }
+        public long getId(){
+            return id;
+        }
+        public String getMessage(){
+            return msg;
+        }
+        public String toString(){
+            return "Message: "+msg+"id "+id;
+        }
+    }
+    private class ChatAdapter extends ArrayAdapter<Message>{
 
         public ChatAdapter(Context ctx) {
             super(ctx, 0);
         }
         public	int getCount(){return arrayList.size();
         }
-        public String getItem(int position){
+        public Message getItem(int position){
             return arrayList.get(position);
         }
         public View getView(int position, View convertView, ViewGroup parent){
@@ -151,13 +178,13 @@ ListView listView;
             if(position%2 == 0) {
                 result = inflater.inflate(R.layout.chat_row_incoming, null);
                 TextView message = (TextView) result.findViewById(R.id.textView3);
-                message.setText(getItem(position)); // get the string at position
+                message.setText(getItem(position).getMessage()); // get the string at position
                 return result;
 
             }else
                 result = inflater.inflate(R.layout.chat_row_outgoing, null);
             TextView message = (TextView)result.findViewById(R.id.textView2);
-            message.setText(   getItem(position)  ); // get the string at position
+            message.setText(   getItem(position).getMessage()  ); // get the string at position
             return result;
         }
 
@@ -182,19 +209,18 @@ ListView listView;
             if(resultCode == Activity.RESULT_OK){
                 Bundle bun = data.getExtras();
                 int result = bun.getInt("ID");
-/*                Long dbid = bun.getLong("DBID");
-                Log.d("DELETEFROMDBBEFORE", dbid+"");*/
-                //deleteFromDb(result, dbid);
-                deleteFromDb(result);
+                Long dbid = bun.getLong("DBID");
+                Log.d("DELETEFROMDBBEFORE", dbid+"");
+                deleteFromDb(result, dbid);
             }
         }
     }
 
-    public void deleteFromDb(int index){
+    public void deleteFromDb(int index, long dbid){
         Log.d("INDEXLOOKS", index+"");
-        arrayList.remove(index);
-        //Log.d("DBIDLOOKS", dbid+"");
-        db.delete(ChatDatabaseHelper.DATABASE_NAME, ChatDatabaseHelper.KEY_ID + "="+ (1+ index), null);
+        arrayList.remove(index);//remove from the arraylist
+        Log.d("DBIDLOOKS", dbid+"");
+        db.delete(ChatDatabaseHelper.DATABASE_NAME, ChatDatabaseHelper.KEY_ID + "="+ dbid, null);
         messageAdapter.notifyDataSetChanged();
     }
 }

@@ -21,7 +21,6 @@ public class MessageFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "ID";
     private static final String ARG_PARAM2 = "MESSAGE";
-
     private int id;
     private long dbid;
     private String msg;
@@ -34,8 +33,8 @@ public class MessageFragment extends Fragment {
         super.onCreate(b);
         Bundle bun = getArguments();
         id = bun.getInt(ARG_PARAM1);
-        //dbid = bun.getLong("DBID");
-        //Log.d("DBIDINFRAGMENT", dbid+"");
+        dbid = bun.getLong("DBID");
+        Log.d("DBIDINFRAGMENT", dbid+"");
         msg = bun.getString(ARG_PARAM2);
 
     }
@@ -43,10 +42,22 @@ public class MessageFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
+        /*if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }*/
 
         parent = context;
     }
+    /*
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+     */
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -61,10 +72,10 @@ public class MessageFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(getActivity().getClass() == ChatWindow.class){
-                    ((ChatWindow)getActivity()).deleteFromDb(id);
+                    ((ChatWindow)getActivity()).deleteFromDb(id, dbid);
                 }else{
                     Intent i = new Intent(getActivity(), ChatWindow.class);
-                    //i.putExtra("DBID", dbid);
+                    i.putExtra("DBID", dbid);
                     i.putExtra("ID", id);
                     getActivity().setResult(Activity.RESULT_OK, i);
                     getActivity().finish();
@@ -75,5 +86,4 @@ public class MessageFragment extends Fragment {
         });
         return gui;
     }
-
 }
