@@ -18,6 +18,7 @@ public class StartActivity extends AppCompatActivity {
     Button button;
     Button button3;
     Button button4;
+    Button TestToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,19 @@ public class StartActivity extends AppCompatActivity {
 
             }
         });
+
+        TestToolbar= (Button)findViewById(R.id.button5);
+
+        TestToolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view) {
+                Log.i(ACTIVITY_NAME, "User clicked Start Chat");
+                Intent intent = new Intent(StartActivity.this, TestToolbar.class);
+                startActivityForResult(intent,5);
+
+            }
+        });
+
 
 //The response code gets passed to
 

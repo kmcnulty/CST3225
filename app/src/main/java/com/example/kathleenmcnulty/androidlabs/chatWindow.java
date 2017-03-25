@@ -116,7 +116,7 @@ ListView listView;
 
                         frag.setArguments(bun);
 
-                        getFragmentManager().beginTransaction().add(R.id.frame, frag).commit();
+                        getFragmentManager().beginTransaction().replace(R.id.frame, frag).commit();
                     }
                     //step 3 if a phone, transition to empty Activity that has FrameLayout
                     else //isPhone

@@ -73,6 +73,9 @@ public class MessageFragment extends Fragment {
             public void onClick(View view) {
                 if(getActivity().getClass() == ChatWindow.class){
                     ((ChatWindow)getActivity()).deleteFromDb(id, dbid);
+
+                    getFragmentManager().beginTransaction().remove(MessageFragment.this).commit();
+
                 }else{
                     Intent i = new Intent(getActivity(), ChatWindow.class);
                     i.putExtra("DBID", dbid);
