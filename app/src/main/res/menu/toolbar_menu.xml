@@ -2,23 +2,30 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item android:id="@+id/About"
+        android:title="About"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
     <item android:id="@+id/action_one"
         android:title="One"
-        android:icon="@drawable/add"
+        android:icon="@drawable/dog"
         android:orderInCategory="101"
         app:showAsAction="always" />
 
     <item android:id="@+id/action_two"
         android:title="One"
-        android:icon="@drawable/add"
-        android:orderInCategory="101"
+        android:icon="@drawable/dogfootprint"
+        android:orderInCategory="102"
         app:showAsAction="always" />
 
     <item android:id="@+id/action_three"
         android:title="One"
-        android:icon="@drawable/add"
-        android:orderInCategory="101"
+        android:icon="@drawable/firehydrant"
+        android:orderInCategory="103"
         app:showAsAction="always" />
+
+
 
 
 </menu>
